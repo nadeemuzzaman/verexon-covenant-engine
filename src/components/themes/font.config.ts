@@ -8,6 +8,7 @@ import {
   Instrument_Sans,
   Inter,
   JetBrains_Mono,
+  Manrope,
   Merriweather,
   Mulish,
   Playfair_Display,
@@ -70,6 +71,11 @@ const fontDMSans = DM_Sans({
   variable: '--font-dm-sans'
 });
 
+const fontManrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope'
+});
+
 const fontFiraCode = Fira_Code({
   subsets: ['latin'],
   variable: '--font-fira-code'
@@ -113,6 +119,7 @@ export const fontVariables = cn(
   fontInter.variable,
   fontArchitectsDaughter.variable,
   fontDMSans.variable,
+  fontManrope.variable,
   fontFiraCode.variable,
   fontOutfit.variable,
   fontSpaceMono.variable,
