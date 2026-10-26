@@ -1,4 +1,5 @@
 'use client';
+
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   DropdownMenu,
@@ -26,20 +27,26 @@ import {
 } from '@/components/ui/sidebar';
 import { UserAvatarProfile } from '@/components/user-avatar-profile';
 import { navGroups } from '@/config/nav-config';
-import { useClerk, useOrganization, useUser } from '@clerk/nextjs';
 import { useFilteredNavGroups } from '@/hooks/use-nav';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Icons } from '../icons';
 import { OrgSwitcher } from '../org-switcher';
 
+const mockUser = {
+  fullName: 'Nadeem uz Zaman',
+  emailAddresses: [{ emailAddress: 'nadeem.uz.zaman@outlook.com' }],
+  imageUrl: ''
+};
+
 export default function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useUser();
-  const { organization } = useOrganization();
-  const { signOut } = useClerk();
   const router = useRouter();
   const filteredGroups = useFilteredNavGroups(navGroups);
+
+  const handleSignOut = () => {
+    router.push('/dashboard/covenants');
+  };
 
   return (
     <Sidebar collapsible='icon'>
@@ -116,7 +123,7 @@ export default function AppSidebar() {
                   />
                 }
               >
-                {user && <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={user} />}
+                <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={mockUser} />
                 <Icons.chevronsDown className='ml-auto size-4' />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -128,25 +135,20 @@ export default function AppSidebar() {
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className='p-0 font-normal'>
                     <div className='px-1 py-1.5'>
-                      {user && (
-                        <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={user} />
-                      )}
+                      <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={mockUser} />
                     </div>
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-
                 <DropdownMenuGroup>
                   <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
                     <Icons.account className='mr-2 h-4 w-4' />
                     Profile
                   </DropdownMenuItem>
-                  {organization && (
-                    <DropdownMenuItem onClick={() => router.push('/dashboard/billing')}>
-                      <Icons.creditCard className='mr-2 h-4 w-4' />
-                      Billing
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem onClick={() => router.push('/dashboard/billing')}>
+                    <Icons.creditCard className='mr-2 h-4 w-4' />
+                    Billing
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/dashboard/notifications')}>
                     <Icons.notification className='mr-2 h-4 w-4' />
                     Notifications
@@ -154,7 +156,7 @@ export default function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/auth/sign-in' })}>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <Icons.logout aria-hidden className='mr-2 h-4 w-4' />
                     Sign out
                   </DropdownMenuItem>
