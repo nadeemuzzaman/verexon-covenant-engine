@@ -1,8 +1,12 @@
 'use client';
-
+import { ClerkProvider } from '@clerk/nextjs';
 import React from 'react';
 import { ActiveThemeProvider } from '../themes/active-theme';
 import QueryProvider from './query-provider';
+
+// NEXT_PUBLIC_* vars are inlined at build time, so this is a static check,
+// not a runtime toggle — consistent with the matching check in proxy.ts.
+const hasClerkKeys = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export default function Providers({
   activeThemeValue,
@@ -11,9 +15,32 @@ export default function Providers({
   activeThemeValue: string;
   children: React.ReactNode;
 }) {
-  return (
-    <ActiveThemeProvider initialTheme={activeThemeValue}>
+  const content = hasClerkKeys ? (
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: 'var(--primary)',
+          colorPrimaryForeground: 'var(--primary-foreground)',
+          colorDanger: 'var(--destructive)',
+          colorBackground: 'var(--card)',
+          colorForeground: 'var(--foreground)',
+          colorMuted: 'var(--muted)',
+          colorMutedForeground: 'var(--muted-foreground)',
+          colorInput: 'var(--input)',
+          colorInputForeground: 'var(--foreground)',
+          colorBorder: 'var(--border)',
+          colorRing: 'var(--ring)',
+          fontFamily: 'var(--font-sans)'
+        }
+      }}
+    >
       <QueryProvider>{children}</QueryProvider>
-    </ActiveThemeProvider>
+    </ClerkProvider>
+  ) : (
+    // No Clerk keys: proxy.ts redirects every route except /setup-required
+    // there, so nothing here ever needs Clerk context.
+    <QueryProvider>{children}</QueryProvider>
   );
+
+  return <ActiveThemeProvider initialTheme={activeThemeValue}>{content}</ActiveThemeProvider>;
 }
