@@ -14,6 +14,8 @@ export const searchParams = {
   gender: parseAsString,
   category: parseAsString,
   role: parseAsString,
+  covenantType: parseAsString,
+  status: parseAsString,
   sort: getSortingStateParser().withDefault([])
 };
 
