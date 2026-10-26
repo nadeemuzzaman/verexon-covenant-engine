@@ -19,6 +19,18 @@
     @apply bg-background text-foreground;
   }
 
+  /* Themes that define --font-heading (e.g. the Covenant brand theme) use
+     it for headings; others fall back to the body font unchanged. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  [data-slot='card-title'] {
+    font-family: var(--font-heading, inherit);
+  }
+
   /* Global scrollbar styling to match ScrollArea */
   * {
     scrollbar-width: thin;
