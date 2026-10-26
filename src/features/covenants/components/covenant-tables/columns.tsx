@@ -16,11 +16,16 @@ const STATUS_ICON: Record<string, Icon> = {
   Pending: Icons.clock
 };
 
-const STATUS_VARIANT: Record<string, 'default' | 'destructive' | 'secondary' | 'outline'> = {
-  Compliant: 'default',
-  Breach: 'destructive',
-  Waived: 'secondary',
-  Pending: 'outline'
+// Executive financial-status palette — light-mode tones alongside the dark-mode
+// variants so the badges stay legible across every theme preset, not just dark.
+const STATUS_CLASSNAME: Record<string, string> = {
+  Compliant:
+    'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-400',
+  Breach:
+    'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800/60 dark:bg-rose-950/50 dark:text-rose-400',
+  Waived: 'border-border bg-muted text-muted-foreground',
+  Pending:
+    'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800/60 dark:bg-amber-950/50 dark:text-amber-400'
 };
 
 export const columns: ColumnDef<DataTableFeatures, Covenant>[] = [
@@ -90,7 +95,7 @@ export const columns: ColumnDef<DataTableFeatures, Covenant>[] = [
       const status = cell.getValue<Covenant['status']>();
       const Icon = STATUS_ICON[status] ?? Icons.circle;
       return (
-        <Badge variant={STATUS_VARIANT[status] ?? 'outline'}>
+        <Badge variant='outline' className={STATUS_CLASSNAME[status]}>
           <Icon />
           {status}
         </Badge>
