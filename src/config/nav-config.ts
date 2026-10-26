@@ -69,6 +69,14 @@ export const navGroups: NavGroup[] = [
         items: []
       },
       {
+        title: 'Covenants',
+        url: '/dashboard/covenants',
+        icon: 'covenant',
+        shortcut: ['c', 'v'],
+        isActive: false,
+        items: []
+      },
+      {
         title: 'Users',
         url: '/dashboard/users',
         icon: 'teams',
