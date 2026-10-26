@@ -1,3 +1,4 @@
+import { auth } from '@clerk/nextjs/server';
 import PageContainer from '@/components/layout/page-container';
 import { buttonVariants } from '@/components/ui/button';
 import CovenantListingPage from '@/features/covenants/components/covenant-listing';
@@ -17,6 +18,8 @@ type PageProps = {
 };
 
 export default async function Page(props: PageProps) {
+  await auth.protect();
+
   const searchParams = await props.searchParams;
   searchParamsCache.parse(searchParams);
 
